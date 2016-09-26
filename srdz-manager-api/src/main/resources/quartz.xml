@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- ##################### 工作的bean ##################### -->
+    <!-- 自动收货 -->
+    <bean id="orderAutoReceive" class="cn.org.citycloud.srdz.task.OrderAutomaticReceive" />
+    <!-- 商品自动下架 -->
+    <bean id="goodsAutoUnshelve" class="cn.org.citycloud.srdz.task.GoodsAutomaticUnshelve" />
+    <!-- 广告自动下架 -->
+    <bean id="adsAutoUnshelve" class="cn.org.citycloud.srdz.task.AdAutomaticUnshelve" />
+    <!-- 活动自动下架 -->
+    <bean id="activityAutoUnshelve" class="cn.org.citycloud.srdz.task.ActivityAutoUnshelve" />
+    <!-- 自动取消订单异常 -->
+    <bean id="orderExceptionCancel" class="cn.org.citycloud.srdz.task.OrderExceptionAutoCancel" />
+    <!-- 退款申请自动流转 -->
+    <bean id="refundTransfer" class="cn.org.citycloud.srdz.task.RefundApplyTransfer" />
+    <!-- 自动好评 -->
+    <bean id="autoEvaluate" class="cn.org.citycloud.srdz.task.AutoEvaluate" />
+    <!-- 自动取消订单 -->
+    <bean id="autoCancelOrder" class="cn.org.citycloud.srdz.task.OrderAutoCancel" />
+
+    <!-- ##################### job的配置开始 ##################### -->
+    <bean id="orderAutoReceiveDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="orderAutoReceive" />
+        </property>
+        <property name="targetMethod">
+            <value>automaticReceive</value>
+        </property>
+    </bean>
+    <bean id="goodsAutoUnshelveDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="goodsAutoUnshelve" />
+        </property>
+        <property name="targetMethod">
+            <value>autoUnshelve</value>
+        </property>
+    </bean>
+    <bean id="disGoodsAutoUnshelveDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="goodsAutoUnshelve" />
+        </property>
+        <property name="targetMethod">
+            <value>autoUnshelveSpecial</value>
+        </property>
+    </bean>
+    <bean id="adsAutoUnshelveDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="adsAutoUnshelve" />
+        </property>
+        <property name="targetMethod">
+            <value>adUnshelve</value>
+        </property>
+    </bean>
+    <bean id="activityAutoUnshelveDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="activityAutoUnshelve" />
+        </property>
+        <property name="targetMethod">
+            <value>activityUnshelve</value>
+        </property>
+    </bean>
+    <bean id="orderExceptionDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="orderExceptionCancel" />
+        </property>
+        <property name="targetMethod">
+            <value>cancelException</value>
+        </property>
+    </bean>
+    <bean id="refundTransferDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="refundTransfer" />
+        </property>
+        <property name="targetMethod">
+            <value>transferApply</value>
+        </property>
+    </bean>
+    <bean id="autoEvaluateDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="autoEvaluate" />
+        </property>
+        <property name="targetMethod">
+            <value>autoEvaluate</value>
+        </property>
+    </bean>
+    <bean id="cancelOrderDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="autoCancelOrder" />
+        </property>
+        <property name="targetMethod">
+            <value>cancelOrder</value>
+        </property>
+    </bean>
+    <!-- ##################### job的配置结束 ##################### -->
+
+
+    <!-- ##################### 调度的配置开始 ##################### -->
+    <bean id="autoReceiveJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="orderAutoReceiveDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 59 23 1/1 * ? *</value>  <!-- Cron表达式“10 */1 * * * ?”意为：从10秒开始，每1分钟执行一次。0 0 12,0 * * ?表示每天12点24点执行  -->
+        </property>
+    </bean>
+    <bean id="autoUnshelveJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="goodsAutoUnshelveDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 59 23 1/1 * ? *</value>  <!-- Cron表达式“10 */1 * * * ?”意为：从10秒开始，每1分钟执行一次。0 0 12,0 * * ?表示每天12点24点执行  -->
+        </property>
+    </bean>
+    <bean id="autoUnshelveDisJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="disGoodsAutoUnshelveDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 59 23 1/1 * ? *</value>  <!-- Cron表达式“10 */1 * * * ?”意为：从10秒开始，每1分钟执行一次。0 0 12,0 * * ?表示每天12点24点执行  -->
+        </property>
+    </bean>
+    <bean id="adAutoUnshelveJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="adsAutoUnshelveDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 59 23 1/1 * ? *</value>  <!-- Cron表达式“10 */1 * * * ?”意为：从10秒开始，每1分钟执行一次。0 0 12,0 * * ?表示每天12点24点执行  -->
+        </property>
+    </bean>
+    <bean id="activityAutoUnshelveJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="activityAutoUnshelveDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 59 23 1/1 * ? *</value>  <!-- Cron表达式“10 */1 * * * ?”意为：从10秒开始，每1分钟执行一次。0 0 12,0 * * ?表示每天12点24点执行  -->
+        </property>
+    </bean>
+    <bean id="orderExceptionJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="orderExceptionDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 59 23 1/1 * ? *</value>  <!-- Cron表达式“10 */1 * * * ?”意为：从10秒开始，每1分钟执行一次。0 0 12,0 * * ?表示每天12点24点执行  -->
+        </property>
+    </bean>
+    <bean id="refundTransJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="refundTransferDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 59 23 1/1 * ? *</value>  <!-- Cron表达式“10 */1 * * * ?”意为：从10秒开始，每1分钟执行一次。0 0 12,0 * * ?表示每天12点24点执行  -->
+        </property>
+    </bean>
+    <bean id="autoEvaluateJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="autoEvaluateDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 59 23 1/1 * ? *</value>  <!-- Cron表达式“10 */1 * * * ?”意为：从10秒开始，每1分钟执行一次。0 0 12,0 * * ?表示每天12点24点执行  -->
+        </property>
+    </bean>
+    <bean id="cancelOrderJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="cancelOrderDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>10 */1 * * * ?</value>  <!-- Cron表达式“10 */1 * * * ?”意为：从10秒开始，每1分钟执行一次。0 0 12,0 * * ?表示每天12点24点执行  -->
+        </property>
+    </bean>
+    <!-- ##################### 调度的配置结束 ##################### -->
+
+
+    <!-- ##################### 启动触发器的配置开始 ##################### -->
+    <bean name="startQuertz" lazy-init="false" autowire="no"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="autoReceiveJobTrigger" />
+                <ref bean="autoUnshelveJobTrigger" />
+                <ref bean="autoUnshelveDisJobTrigger" />
+                <ref bean="adAutoUnshelveJobTrigger" />
+                <ref bean="activityAutoUnshelveJobTrigger" />
+                <ref bean="orderExceptionJobTrigger" />
+                <ref bean="refundTransJobTrigger" />
+                <ref bean="autoEvaluateJobTrigger" />
+                <ref bean="cancelOrderJobTrigger" />
+            </list>
+        </property>
+    </bean>
+    <!-- ##################### 启动触发器的配置结束 ##################### -->
+
+
+</beans>

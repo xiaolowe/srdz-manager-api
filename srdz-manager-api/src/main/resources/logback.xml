@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 参考文档 http://blog.csdn.net/yuyongpeng/article/details/1777892 http://www.cnblogs.com/yongze103/archive/2012/05/05/2484753.html -->
+<configuration>
+	<!--<appender name="console" class="ch.qos.logback.core.ConsoleAppender">-->
+		<!--<encoder>-->
+			<!--<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n-->
+			<!--</pattern>-->
+		<!--</encoder>-->
+	<!--</appender>-->
+
+	<!--<appender name="rollingFile"-->
+		<!--class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+		<!--<file>/var/log/tomcat/srdz-manager-api.log</file>-->
+		<!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+			<!--<fileNamePattern>/var/log/tomcat/srdz-manager-api.%d{yyyy-MM-dd}.%i.log-->
+			<!--</fileNamePattern>-->
+			<!--&lt;!&ndash; keep 30 days' worth of history &ndash;&gt;-->
+			<!--<maxHistory>30</maxHistory>-->
+			<!--<timeBasedFileNamingAndTriggeringPolicy-->
+				<!--class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">-->
+				<!--&lt;!&ndash; or whenever the file size reaches 100MB &ndash;&gt;-->
+				<!--<maxFileSize>1MB</maxFileSize>-->
+			<!--</timeBasedFileNamingAndTriggeringPolicy>-->
+		<!--</rollingPolicy>-->
+		<!--<encoder>-->
+			<!--<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n-->
+			<!--</pattern>-->
+		<!--</encoder>-->
+	<!--</appender>-->
+
+	<!--<appender name="financeLog"-->
+			  <!--class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+		<!--<file>/var/log/tomcat/srdz-manager-api.log</file>-->
+		<!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+			<!--<fileNamePattern>/var/log/tomcat/srdz-manager-api.%d{yyyy-MM-dd}.%i.log-->
+			<!--</fileNamePattern>-->
+			<!--&lt;!&ndash; keep 30 days' worth of history &ndash;&gt;-->
+			<!--<maxHistory>30</maxHistory>-->
+			<!--<timeBasedFileNamingAndTriggeringPolicy-->
+					<!--class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">-->
+				<!--&lt;!&ndash; or whenever the file size reaches 100MB &ndash;&gt;-->
+				<!--<maxFileSize>1MB</maxFileSize>-->
+			<!--</timeBasedFileNamingAndTriggeringPolicy>-->
+		<!--</rollingPolicy>-->
+		<!--<encoder>-->
+			<!--<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n-->
+			<!--</pattern>-->
+		<!--</encoder>-->
+	<!--</appender>-->
+
+	<!--&lt;!&ndash; project default level &ndash;&gt;-->
+	<!--<logger name="cn.org.citycloud.srdz" level="INFO" />-->
+
+	<!--&lt;!&ndash;log4jdbc &ndash;&gt;-->
+	<!--<logger name="jdbc.sqltiming" level="INFO" />-->
+
+	<!--<root level="WARN">-->
+		<!--<appender-ref ref="console" />-->
+		<!--<appender-ref ref="rollingFile" />-->
+	<!--</root>-->
+	<appender name="rollingFile"
+			  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/data/log/tomcat/srdz-manager-api/srdz-manager-api.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>/data/log/tomcat/srdz-manager-api/srdz-manager-api.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+					class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 100MB -->
+				<maxFileSize>5MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="financeLog"
+			  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/data/log/tomcat/srdz-manager-api/srdz-manager-finance.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>/data/log/tomcat/srdz-manager-api/srdz-manager-finance.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+					class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 100MB -->
+				<maxFileSize>5MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="cn.org.citycloud.srdz" level="ERROR">
+		<appender-ref ref="rollingFile" />
+	</logger>
+
+	<!-- project default level -->
+	<logger name="cn.org.citycloud.srdz.service.impl.FinanceServiceImpl" level="INFO">
+		<appender-ref ref="financeLog" />
+	</logger>
+	<!--log4jdbc -->
+	<logger name="jdbc.sqltiming" level="ERROR">
+		<appender-ref ref="rollingFile" />
+	</logger>
+
+</configuration>
